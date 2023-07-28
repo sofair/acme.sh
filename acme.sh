@@ -4672,6 +4672,12 @@ $_authorizations_map"
       entry="$(echo "$response" | _egrep_o '[^\{]*"type":"'$vtype'"[^\}]*')"
       _debug entry "$entry"
 
+      if [ -z "$entry" ]; then
+        _debug entry "get first available"
+        entry="$(echo "$response" | _egrep_o '[^\{]*[^\}]*')"
+        _debug entry "$entry"
+      fi      
+
       if [ -z "$keyauthorization" -a -z "$entry" ]; then
         _err "Error, can not get domain token entry $d for $vtype"
         _supported_vtypes="$(echo "$response" | _egrep_o "\"challenges\":\[[^]]*]" | tr '{' "\n" | grep type | cut -d '"' -f 4 | tr "\n" ' ')"
